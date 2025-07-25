@@ -10,8 +10,12 @@ import io
 from googleapiclient.http import MediaIoBaseDownload
 import pytesseract
 
-# ✅ Tesseract 실행 파일 경로 직접 지정
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+import platform
+import pytesseract
+
+# ✅ OS에 따라 Tesseract 경로 자동 설정
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"  # Streamlit Cloud/Linux 기본 경로
+
 
 def load_google_service_account_key():
     return st.secrets["gcp"]
