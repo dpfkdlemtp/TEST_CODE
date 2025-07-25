@@ -48,9 +48,6 @@ def load_explain_data_from_drive():
 # ✅ 기존 로컬 파일 대신 Drive에서 로드
 explain_data = load_explain_data_from_drive()
 
-# Tesseract 경로 (환경에 맞게 수정)
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
 # 이상적 범위
 ideal_ranges = {
     "지지표현": (65, 85),
