@@ -4,19 +4,17 @@ import streamlit as st
 # 기존 모듈 임포트
 # ---------------------------
 from D import (
-    extract_pat_graph_by_render, ocr_pat_graph, explain_results
+    extract_pat_graph_by_render, ocr_pat_graph, explain_results, load_explain_data_from_drive
 )
 from C import (
     extract_tci_percentiles, extract_tci_m_sd, build_matching_Temperament_keys,
-    build_matching_Summary_keys, find_best_matching_key, load_temperament_dict
+    build_matching_Summary_keys, find_best_matching_key, load_temperament_dict_from_drive
 )
 from B import (
     extract_all_scores, format_index_scores_excel, format_subtest_scores_excel
 )
 import os
 
-# ✅ TCI JSON 경로
-TCI_JSON_PATH = "temperament_categorized.json"
 
 # ---------------------------
 # ✅ Streamlit UI
@@ -81,7 +79,7 @@ with tabs[1]:
         st.subheader("✅ H/M/L 값")
         st.json(hml_values)
 
-        data = load_temperament_dict(TCI_JSON_PATH)
+        data = load_temperament_dict_from_drive()
         matching_keys = build_matching_Temperament_keys(hml_values, m_sd)
         st.subheader("🔍 매칭 키")
         st.json(matching_keys)
