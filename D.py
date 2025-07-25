@@ -2,14 +2,16 @@ import streamlit as st
 import os
 import fitz  # PyMuPDF
 from PIL import Image, ImageEnhance, ImageFilter
-import pytesseract
 import re
 import json
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 import io
 from googleapiclient.http import MediaIoBaseDownload
+import pytesseract
 
+# ✅ Tesseract 실행 파일 경로 직접 지정
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 def load_google_service_account_key():
     return st.secrets["gcp"]
