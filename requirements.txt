@@ -1,12 +1,20 @@
-streamlit==1.44.1
-pandas
-gspread==6.2.0
+# --- Streamlit UI ---
+streamlit==1.36.0
+
+# --- PDF 처리 ---
+pymupdf==1.24.10        # fitz (PyMuPDF)
+pdfplumber==0.11.4
+
+# --- 이미지 및 OCR ---
+pillow==10.3.0          # PIL
+pytesseract==0.3.10
+
+# --- 데이터 처리 ---
+pandas==2.2.2
+
+# --- Google Drive 연동 (TCI JSON) ---
+google-api-python-client==2.129.0
 oauth2client==4.1.3
-google-api-python-client==2.70.0
-Pillow
-numpy
-reportlab
-cryptography
-regex
-streamlit-oauth
-PyPDF2
+
+# --- 기타 ---
+protobuf==4.25.3        # google-api-python-client에서 종종 필요
