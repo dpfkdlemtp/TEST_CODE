@@ -5,6 +5,42 @@ from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
 import re
 import json
+from googleapiclient.discovery import build
+from oauth2client.service_account import ServiceAccountCredentials
+import io
+from googleapiclient.http import MediaIoBaseDownload
+
+
+def load_google_service_account_key():
+    return st.secrets["gcp"]
+
+# ✅ Google Drive 연결 함수
+@st.cache_resource(ttl=3000, show_spinner=False)
+def get_drive_service():
+    scope = ['https://www.googleapis.com/auth/drive']
+    key_dict = load_google_service_account_key()
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(key_dict, scope)
+    return build('drive', 'v3', credentials=creds)
+
+# ✅ Google Drive에서 판단별_설명.json 로드
+@st.cache_data(ttl=3000, show_spinner=False)
+def load_explain_data_from_drive():
+    service = get_drive_service()
+
+    # Google Drive 공유 URL에서 파일 ID 추출
+    file_id = "1n17KiyaQ5cp_xFjgzFtmrE2Hvoqh5aXC"
+
+    request = service.files().get_media(fileId=file_id)
+    fh = io.BytesIO()
+    downloader = MediaIoBaseDownload(fh, request)
+    done = False
+    while not done:
+        status, done = downloader.next_chunk()
+    fh.seek(0)
+    return json.load(fh)
+
+# ✅ 기존 로컬 파일 대신 Drive에서 로드
+explain_data = load_explain_data_from_drive()
 
 # Tesseract 경로 (환경에 맞게 수정)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -62,8 +98,7 @@ def ocr_pat_graph(image_path):
     return {"백분위": numbers, "결과": evaluated}
 
 # 판단별 설명 로드
-with open("판단별_설명.json", "r", encoding="utf-8") as f:
-    explain_data = json.load(f)
+explain_data = load_explain_data_from_drive()
 
 def explain_results(evaluated):
     ideal_titles, ideal_texts, non_titles, non_texts = [], [], [], []
