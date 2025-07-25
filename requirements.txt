@@ -6,7 +6,7 @@ pymupdf==1.24.10        # fitz (PyMuPDF)
 pdfplumber==0.11.4
 
 # --- 이미지 및 OCR ---
-pillow==10.3.0          # PIL
+pillow==9.5.0        # 3.13 호환 버전
 pytesseract==0.3.10
 
 # --- 데이터 처리 ---
