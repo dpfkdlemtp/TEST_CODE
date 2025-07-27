@@ -4,8 +4,9 @@ import streamlit as st
 # 기존 모듈 임포트
 # ---------------------------
 from D import (
-    extract_pat_graph_by_render, ocr_pat_graph, explain_results, load_explain_data_from_drive
+    extract_pat_percentiles_from_bytes, explain_results
 )
+
 from C import (
     extract_tci_percentiles, extract_tci_m_sd, build_matching_Temperament_keys,
     build_matching_Summary_keys, find_best_matching_key, load_temperament_dict_from_drive
@@ -106,15 +107,8 @@ with tabs[2]:
     pat_file = st.file_uploader("PAT PDF 업로드", type=["pdf"], key="PAT")
 
     if pat_file:
-        graph_img_bytes = extract_pat_graph_by_render(pat_file.read())
-        graph_img_path = "temp_graph.png"
-        with open(graph_img_path, "wb") as f:
-            f.write(graph_img_bytes)
-
-        st.image(graph_img_path, caption="추출된 그래프", use_column_width=True)
-        data = ocr_pat_graph(graph_img_path)
-
-        st.subheader("✅ OCR 결과")
+        data = extract_pat_percentiles_from_bytes(pat_file)
+        st.subheader("✅ 분석 결과")
         st.write(f"**백분위:** {data['백분위']}")
         st.write(f"**결과:** {data['결과']}")
 
@@ -127,3 +121,4 @@ with tabs[2]:
             st.subheader(f"[미흡/지나침] - {', '.join(non_titles)}")
             for txt in non_texts:
                 st.write(txt)
+
